@@ -338,3 +338,401 @@ FROM dual
 SELECT ABS(-12.456)
 FROM dual
 ;
+
+-- 29.
+-- <예시>와 같이 문자열을 대문자, 소문자, 첫글자만 대문자로 
+-- 변환하는 SQL문을 작성하시오.
+-- 원문 : 'AlOhA WoRlD~!'
+SELECT 'AlohA WoRlD~!' AS 원문
+       ,UPPER('AlohA WoRlD~!') AS 대문자
+       ,LOWER('AlohA WoRlD~!') AS 소문자
+       ,INITCAP('AlohA WoRlD~!') AS "첫 글자만 대문자"      -- 중간 빈칸(space)가 있기 때문에 "" 사용하여 처리
+FROM dual
+;
+
+-- 30.
+-- <예시>와 같이 문자열의 글자 수와 바이트 수를 
+-- 출력하는 SQL문을 작성하시오.
+-- LENGTH('문자열')  : 글자 수
+-- LENGTHB('문자열') : 바이트 수
+-- * 영문, 숫자, 빈칸  : 1 byte
+-- * 한글             : 3 byte
+SELECT LENGTH('ALOHA WORLD') AS "글자 수"
+      ,LENGTHB('ALOHA WORLD') AS "바이트 수"
+FROM dual
+;
+
+SELECT LENGTH('알로하 월드') AS "글자 수"
+      ,LENGTHB('알로하 월드') AS "바이트 수"
+FROM dual
+;
+
+-- 31.
+-- 두 문자열을 연결하기
+-- CONCAT(문자열1, 문자열2)
+-- : 두 문자열을 연결하여 반환하는 함수
+SELECT CONCAT('ALOHA', 'WORLD') AS 함수
+      ,'ALOHA' || 'WORLD' AS 기호
+FROM dual
+;
+
+-- 32.
+-- 문자열 부분 출력하기
+-- SUBSTR(문자열, 시작번호, 글자수)
+-- 'www.alohaclass.kr'
+SELECT SUBSTR('www.alohaclass.kr', 1, 3) AS "1"         -- 글자 수
+      ,SUBSTR('www.alohaclass.kr', 5, 10) AS "2"
+      ,SUBSTR('www.alohaclass.kr', -2, 2) AS "3"
+FROM dual
+;
+
+SELECT SUBSTRB('www.alohaclass.kr', 1, 3) AS "1"        -- 바이트 수
+      ,SUBSTRB('www.alohaclass.kr', 5, 10) AS "2"
+      ,SUBSTRB('www.alohaclass.kr', -2, 2) AS "3"
+FROM dual
+;
+
+-- 한글의 경우
+SELECT SUBSTR('www.알로하클래스.com', 1, 3) AS "1"        -- 글자 수
+      ,SUBSTR('www.알로하클래스.com', 5, 6) AS "2"
+      ,SUBSTR('www.알로하클래스.com', -3, 3) AS "3"
+FROM dual
+;
+
+SELECT SUBSTRB('www.알로하클래스.com', 1, 3) AS "1"       -- 바이트 수
+      ,SUBSTRB('www.알로하클래스.com', 5, 18) AS "2"
+      ,SUBSTRB('www.알로하클래스.com', -3, 3) AS "3"
+FROM dual
+;
+
+-- 33. 
+-- 문자열에서 특정 문자의 위치를 구하는 함수
+-- INSTR( 문자열, 찾을 문자, 시작 번호, 순서 )
+-- ex) 'ALOHACLASS'
+-- 해당 문자열에서 첫글자 부터 찾아서, 2번째 A의 위치를 구하시오.
+-- INSTR('ALOHACLASS', 'A', 1)
+-- : 해당 문자열에서 'A' 를 1번 위치부터 찾아서 가장 처음 만나는 A의 위치를 반환
+-- INSTR('ALOHACLASS', 'A', 1, 2)
+-- : 해당 문자열에서 'A', 1번 위치부터 찾아서 2번째 나온 A 위치 반환
+SELECT INSTR('ALOHACLASS', 'A', 1, 1) AS "1번째 A"
+      ,INSTR('ALOHACLASS', 'A', 1, 2) AS "1번째 A"
+      ,INSTR('ALOHACLASS', 'A', 1, 3) AS "1번째 A"
+      ,INSTR('ALOHACLASS', 'A', 1, 4) AS "1번째 A" -- 없는 경우 0반환
+FROM dual
+;
+
+-- 34.
+-- 문자열을 왼쪽/오른쪽에 출력하고, 빈공간을 특정 문자로 채우는 함수
+-- LPAD( 문자열, 칸의 수, 채울 문자 )
+-- : 문자열에 지정한 칸을 확보하고, 왼쪽에 특정 문자로 채움
+-- RPAD( 문자열, 칸의 수, 채울 문자 )
+-- : 문자열에 지정한 칸을 확보하고, 오른쪽에 특정 문자로 채움
+-- 'ALOHACLASS'
+SELECT LPAD('ALOHACLASS', 20, '#') AS "왼쪽"
+      ,RPAD('ALOHACLASS', 20, '#') AS "오른쪽"
+FROM dual
+;
+
+-- 주민등록번호 뒷자리 첫 자리를 제외한 나머지 문자를 *로 마스킹하시오
+SELECT RPAD(SUBSTR('020905-3123456', 1, 8), 14, '*') 주민등록번호       -- 1~8자리까지 문자열 처리, 9~14자리까지 *처리 .. 하는 명령
+FROM dual
+;
+
+-- 35.
+-- HIRE_DATE 입사일자를 날짜형식을 지정하여 출력하시오.
+-- 형식 : 2024-03-04 (월) 12:34:56
+-- TO_CHAR( 데이터, '날짜/숫자 형식' )
+-- : 특정 데이터를 문자열 형식으로 변환하는 함수
+SELECT first_name AS 이름
+      ,TO_CHAR(hire_date, 'YYYY-MM-DD (DY) HH:MI:SS') AS 입사일자
+      ,hire_date
+FROM employees
+;
+
+-- 36.
+-- SALARY 급여를 통화형식으로 지정하여 출력하시오.
+SELECT first_name AS 이름
+      ,TO_CHAR(salary, '$999,999,999') AS 급여
+      ,salary
+FROM employees
+;
+
+-- 37.
+-- TO_DATE( 데이터 )
+-- : 문자형 데이터를 날짜형 데이터로 변환하는 함수
+SELECT '20251114' 문자
+      ,TO_DATE('20251114', 'YYYYMMDD') AS 날짜1
+      ,TO_DATE('2025/11/14', 'YYYY/MM/DD') AS 날짜2
+      ,TO_DATE('2025-11-14', 'YYYY-MM-DD') AS 날짜3
+      ,TO_DATE('2025.11.14', 'YYYY.MM.DD') AS 날짜4
+FROM dual
+;
+
+-- 38.
+-- TO_NUMBER( 데이터 )
+-- : 문자형 데이터를 숫자형 데이터로 변환하는 함수
+SELECT '1,200,200' 문자
+      ,TO_NUMBER('1,200,200', '999,999,999') AS 숫자
+FROM dual
+;
+
+-- 39.
+-- 어제, 오늘, 내일 날짜를 출력하시오.
+-- sysdate : 현재 날짜/시간 정보를 가지고 있는 키워드
+-- 2023/05/22 - YYYY/MM/DD 형식으로 출력
+-- 날짜 데이터 --> 문자 데이터 변환
+SELECT sysdate
+FROM dual
+;
+
+SELECT sysdate-1 AS 어제
+      ,sysdate AS 오늘
+      ,sysdate AS 내일
+FROM dual
+;
+
+-- 40.
+-- 사원의 근무달수와 근속연수를 구하시오.
+-- MONTHS_BETWEEN( A, B )
+-- - 날짜 A부터 B까지 개월 수 차이를 반환하는 함수
+-- (단, A > B 즉, A가 더 최근 날짜로 지정해야 양수로 반환)
+SELECT first_name 이름
+      ,TO_CHAR(hire_date, 'YYYY.MM.DD') 입사일자
+      ,TO_CHAR(sysdate, 'YYYY.MM.DD') 오늘
+      ,TRUNC(MONTHS_BETWEEN(sysdate, hire_date)) || '개월' 근무달수
+      ,TRUNC(MONTHS_BETWEEN(sysdate, hire_date) / 12) || '년' 근속연수
+FROM employees
+;
+
+-- 41.
+-- 오늘로부터 6개월 후의 날짜를 구하시오.
+-- ADD_MONTHS( 날짜, 개월 수 )
+-- : 지정한 날짜로부터 해당 개월 수를 후의 날짜를 반환하는 함수
+SELECT sysdate 오늘
+      ,ADD_MONTHS(sysdate, 6) "6개월 후"
+      ,ADD_MONTHS(sysdate, -6) "6개월 전"
+FROM dual
+;
+
+SELECT '2025/10/20' 개강
+      ,ADD_MONTHS('2025/10/20', 6) 종강
+FROM dual
+;
+
+-- 42.
+-- 오늘 이후 돌아오는 토요일을 구하시오.
+-- NEXT_DAY( 날짜, 요일 )
+-- : 지정한 날짜 이후 돌아오는 요일을 반환하는 함수
+-- 일 월 화 수 목 금 토
+-- 1  2  3  4  5 6  7
+SELECT sysdate 오늘
+      ,NEXT_DAY(sysdate, 7) "다음 토요일"
+FROM dual
+;
+
+-- 43.
+-- 오늘 날짜와 해당 월의 월초, 월말 일자를 구하시오.
+-- 월초 : TRUNC( 날짜, 'MM' )
+-- 월말 : LAST_DAY( 날짜 )
+/*
+      날짜 데이터 : XXXXXXX.YYYYYYYY
+      1970년1월1일 00시00분00초00ms
+      지난 일자를 정수로 계산, 시간 정보는 소수부분으로 계산
+      TRUNC( XXXXXXX.YYYYYYYY ) --> XXXXXXX
+      정수 부분인 년월일만 남는다.
+      마찬가지로, 월 단위를 기준으로 절삭하면 월초를 구할 수 있다.
+*/
+SELECT TRUNC(sysdate, 'MM') 월초
+      ,sysdate 오늘
+      ,LAST_DAY(sysdate) 월말
+FROM dual
+;
+
+-- 44.
+-- 테이블 EMPLOYEES 의 COMMISSION_PCT 를 중복없이 검색하되, 
+-- NULL 이면 0으로 조회하고 내림차순으로 정렬하는 SQL 문을 작성하시오.
+-- DISTINCT : 중복 없이 조회
+-- NVL( 값, 대체할 값 ) : 해당 값이 NULL 이면 지정된 값으로 변환하는 함수
+-- * ORDER BY 의 정렬기준 컬럼은, SELECT 에서 선택한 컬럼만 사용 가능하다.
+SELECT DISTINCT NVL(COMMISSION_PCT, 0)
+FROM employees
+ORDER BY NVL(COMMISSION_PCT, 0) DESC
+;
+
+SELECT DISTINCT NVL(COMMISSION_PCT, 0) "커미션(%)"
+FROM employees
+ORDER BY NVL(COMMISSION_PCT, 0) DESC
+;
+
+/*
+  SELECT 컬럼
+  FROM 테이블
+  WHERE 조건
+  GROUP BY 그룹기준
+  ORDER BY 정렬기준
+  * SELEFT 실행순서
+  - FROM ➡️ WHERE ➡️ GROUP BY ➡️ HAVING ➡️ SELECT ➡️ ORDER BY
+  1. 테이블을 선택한다
+  2. 조건에 맞는 데이터를 선택한다
+  3. 그룹기준을 지정한다
+  4. 그룹별로 그룹조건에 맞는 데이터를 선택한다
+  5. 조회할 컬럼을 선택한다
+  6. 조회된 결과를 정렬기준에 따라 정렬
+*/
+
+-- 45.
+-- EMPLOYEES 의 FIRST_NAME, SALARY, COMMISSION_PCT 속성을 이용하여 
+-- 급여, 커미션, 최종급여를 조회하시오. 최종급여를 기준으로 내림차순 정렬하시오.
+-- * 최종급여 = 급여 + (급여 * 커미션)
+-- * NVL2( 값, NULL 아닐 때 값, NULL 일 때 값 )
+-- * NULL 과 값을 연산한 결과는 NULL 이다.
+
+-- 커미션이 있는 사원만 보고 싶은 경우
+-- IS NOT NULL 을 사용하여 처리
+SELECT first_name 이름
+      ,salary 급여
+      ,commission_pct
+      ,commission_pct 커미션
+      ,(salary + (salary * commission_pct)) 최종급여
+FROM employees
+WHERE commission_pct IS NOT NULL
+;
+
+-- 커미션이 없는 사람의 경우까지 포함하여 최종급여를 산출하고 싶은 경우
+-- NVL을 사용하여 처리
+SELECT first_name 이름
+      ,salary 급여
+      ,commission_pct
+      ,NVL(commission_pct, 0) 커미션
+      ,NVL2(commission_pct, salary + (salary * commission_pct), salary) 최종급여
+      ,salary + NVL2(commission_pct, (salary * commission_pct), 0) 최종급여
+FROM employees
+;
+
+-- * COALESCE
+-- employees 테이블에서 직원의 이메일이 NULL 이면 전화번호(phone_number)를
+-- 전화번호도 NULL 이면, 이름(first_name)을 출력하시오
+SELECT employee_id
+      ,COALESCE(email, phone_number, first_name) 연락처
+FROM employees
+;
+
+-- *LNNVL
+-- employees 테이블에서 커미션이 0.2 이상이 아닌 직원을 조회하시오.
+SELECT employee_id, commission_pct
+FROM employees
+WHERE LNNVL(commission_pct >= 0.2)
+;
+
+-- * NULLIF
+-- employees 테이블의 직원의 급여와, 최종급여가 같으면 NULL
+-- 다르면 최종급여를 출력하시오
+-- (커미션이 있는 사원만 출력하시오.)
+SELECT first_name
+      ,(salary + (salary*commission_pct)) 최종급여
+FROM employees
+WHERE NULLIF((salary + (salary*commission_pct)), salary) IS NOT NULL
+;
+
+-- 46.
+-- DEPARTMENTS 테이블을 참조하여, 사원의 이름과 부서명을 출력하시오.
+-- DECODE( 컬럼명, 조건값1, 반환값1, 조건값2, 반환값2, ... )
+-- : 지정한 컬럼의 값이 조건값에 일치하면 바로 뒤의 반환값을 출력하는 함수
+
+-- 사원 테이블  : department_id (부서번호)
+SELECT first_name 이름
+      ,department_id 부서번호
+      ,DECODE(department_id, 10, 'Administration'
+                           , 20, 'Marketing'
+                           , 30, 'Purchasing'
+                           , 40, 'Human Resources'
+                           , 50, 'Shipping'
+                           , 60, 'IT'
+                           , 70, 'Public Relations'
+                           , 80, 'Sales'
+                           , 90, 'Executive'
+                           , 100, 'Finance'      
+      )
+FROM employees
+;
+
+-- * CASE WHEN THEN END
+SELECT first_name 이름
+      ,department_id 부서번호
+      ,CASE
+        WHEN department_id = 10 THEN 'Administration'
+        WHEN department_id = 20 THEN 'Marketing'
+        WHEN department_id = 30 THEN 'Purchasing'
+        WHEN department_id = 40 THEN 'Human Resources'
+        WHEN department_id = 50 THEN 'Shipping'
+        WHEN department_id = 60 THEN 'IT'
+        WHEN department_id = 70 THEN 'Public Relations'
+        WHEN department_id = 80 THEN 'Sales'
+        WHEN department_id = 90 THEN 'Executive'
+        WHEN department_id = 100 THEN 'Finance'
+        ELSE '부서없음'
+      END 부서
+FROM employees
+;
+
+-- 부서 테이블 조회
+SELECT *
+FROM departments
+;
+
+-- * GREATEST/LEAST
+-- 최종급여, 급여, 보너스25% 중 가장 큰 값과
+-- 최종급여, 급여, 보너스25% 중 가장 작은 값을 출력하시오
+SELECT first_name
+      ,GREATEST((salary + (salary*commission_pct)), salary, (salary + (salary*0.25))) 최대
+      ,LEAST((salary + (salary*commission_pct)), salary, (salary + (salary*0.25))) 최소
+FROM employees
+WHERE commission_pct IS NOT NULL
+;
+-- NVL(commission_pct,0)으로 바꿔줘도 됨
+
+-- 그룹함수
+-- 48.
+-- EMPLOYEES 테이블로 부터 전체 사원 수를 구하시오.
+-- COUNT( 컬럼명 )
+-- : 컬럼을 지정하여 NULL 을 제외한 데이터 개수를 반환하는 함수
+-- * NULL 이 없는 데이터라면 어떤 컬럼을 지정하더라도 개수가 같으므로,
+--   일반적으로 COUNT(*) 로 개수를 구한다.
+-- COUNT(*) : NULL 도 포함하여 개수를 구함.
+SELECT COUNT(department_id) 사원수
+FROM employees
+;
+
+-- COUNT(컬럼) : NULL은 제외하고 계수를 수함
+SELECT COUNT(commission_pct) "성과급이 있는 사원수"
+FROM employees
+;
+
+-- 49.
+-- 사원들의 최고급여와 최저급여를 구하시오
+SELECT MAX(salary) 최고급여
+      ,MIN(salary) 최저급여
+FROM employees
+;
+
+-- 50.
+-- 사원들의 급여 합계와 평균을 구하시오
+SELECT SUM(salary) 급여합계
+      ,ROUND(AVG(salary), 2) 급여평균
+FROM employees
+;
+
+-- 51.
+-- 사원들의 급여 표준편차와 분산을 구하시오
+SELECT ROUND(STDDEV(salary), 2) 급여표준편차
+      ,ROUND(VARIANCE(salary), 2) 급여분산
+FROM employees
+;
+
+-- * 부서별 사원 수를 구하시오
+SELECT department_id, COUNT(*)
+FROM employees
+GROUP BY department_id      -- 부서별로 정렬
+ORDER BY department_id      -- 정렬된 것을 순서대로 재정령
+;
+
