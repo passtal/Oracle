@@ -135,3 +135,93 @@ COMMENT ON COLUMN MS_STUDENT.REG_DATE IS '등록일자';
 COMMENT ON COLUMN MS_STUDENT.UPD_DATE IS '수정일자';
 COMMENT ON COLUMN MS_STUDENT.ETC IS '특이사항';
 
+-- 58.
+-- 데이터 삽입
+INSERT INTO MS_STUDENT (ST_NO, NAME, BIRTH, EMAIL, ADDRESS, MJ_NO, GENDER,
+                        STATUS, ADM_DATE, GRD_DATE, REG_DATE, UPD_DATE, ETC
+                       )
+VALUES('20240001', '최영우', '2005/10/05', 'cyw@univ.ac.kr', '서울', 'I01', '남',
+       '재학', '2024/03/01', NULL, sysdate, sysdate, NULL)
+;
+
+INSERT INTO MS_STUDENT (ST_NO, NAME, BIRTH, EMAIL, ADDRESS, MJ_NO, GENDER,
+                        STATUS, ADM_DATE, GRD_DATE, REG_DATE, UPD_DATE, ETC
+                       )
+VALUES('20110002', '한성호', '1992/10/07', 'hsh@univ.ac.kr', '서울', 'E03', '남',
+       '재학', '2011/03/01', NULL, sysdate, sysdate, NULL)
+;
+
+SELECT * FROM MS_STUDENT;
+
+-- '2024/03/01' -> TO_DATE('2024/03/01', 'YYYY/MM/DD') 도 가능
+-- '2024/03/01' : 문자타입이 DATE 으로 내부적으로 변환되서 데이터 추가
+-- DB 툴을 이용하여 INSERT 한다면, COMMIT 을 실행해야 LOCK 걸리지 않고 적용됨.
+
+COMMIT;
+
+-- 59.
+-- MS_STUDENT 테이블의 데이터를 수정
+-- UPDATE
+/*
+    UPDATE 테이블명
+       SET 컬럼1 = 변경할 값,
+           컬럼2 = 변경할 값,
+           ...
+   [WHERE] 조건;
+*/
+
+-- * 이름이 '한성호' 인 학생의 재적 상태를 '퇴학'
+-- 수정일자를 현재날짜, 특이사항 '자진 퇴학' 으로 수정하시오.
+UPDATE MS_STUDENT
+    SET STATUS = '퇴학', UPD_DATE = sysdate, ETC = '자진퇴학'
+WHERE NAME = '한성호'
+;
+
+UPDATE MS_STUDENT
+    SET MJ_NO = 'I01', UPD_DATE = sysdate
+WHERE NAME = '최영우'
+;
+
+-- 60.
+-- MS_STUDENT 테이블에서 학번이 20110002 인 학생을 삭제하시오.
+DELETE FROM MS_STUDENT
+WHERE ST_NO = '20110002'
+;
+
+SELECT * FROM MS_STUDENT;
+
+-- 61.
+-- MS_STUDENT 테이블의 모든 속성을 조회하시오.
+SELECT * FROM MS_STUDENT;
+
+-- 62.
+-- MS_STUDENT 테이블을 조회하여 MS_STUDENT_BACK 테이블 생성하시오.
+-- 백업 테이블 만들기
+CREATE TABLE MS_STUDENT_BACK
+AS SELECT * FROM MS_STUDENT
+;
+
+SELECT * FROM MS_STUDENT_BACK;
+
+-- 63.
+-- MS_STUDENT 테이블의 튜플을 삭제하시오.
+
+-- 데이터 삭제 (롤백 가능)
+DELETE FROM MS_STUDENT
+;
+
+-- 데이터 및 내부구조 삭제 (롤백 불가능)
+TRUNCATE TABLE MS_STUDENT
+;
+
+-- TABLE 전체 삭제
+DROP TABLE MS_STUDENT
+;
+
+-- 64.
+-- MS_STUDENT_BACK 테이블의 모든 속성을 조회하여
+-- MS_STUDENT 테이블에 삽입하시오.
+INSERT INTO MS_STUDENT
+SELECT * FROM MS_STUDENT_BACK
+;                               -- 실행 시 롤백
+SELECT * FROM MS_STUDENT;       -- 롤백 성공

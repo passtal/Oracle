@@ -751,3 +751,5 @@ ORDER BY department_id      -- 정렬된 것을 순서대로 재정령
         ...
     );
 */
+
+-- ALOHA.sql 로 이동..
