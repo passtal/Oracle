@@ -499,7 +499,7 @@ FROM dual
 SELECT first_name 이름
       ,TO_CHAR(hire_date, 'YYYY.MM.DD') 입사일자
       ,TO_CHAR(sysdate, 'YYYY.MM.DD') 오늘
-      ,TRUNC(MONTHS_BETWEEN(sysdate, hire_date)) || '개월' 근무달수
+      ,TRUNC(MONTHS_BETWEEN(sysdate, hire_date)) || '개월' 근무달수             -- || 는 문자열 연결(String Concatenation) 연산자의 역할
       ,TRUNC(MONTHS_BETWEEN(sysdate, hire_date) / 12) || '년' 근속연수
 FROM employees
 ;
@@ -736,3 +736,18 @@ GROUP BY department_id      -- 부서별로 정렬
 ORDER BY department_id      -- 정렬된 것을 순서대로 재정령
 ;
 
+-- delete와 truncate의 차이
+-- delete → transaction 단위로 적용. (되돌리기 가능)
+-- truncate → 잘못된 실행이었을 경우에도 되돌리기 불가능 (전체 즉시 삭제)
+
+-- 52.
+-- MS_STUDENT 테이블을 생성하시오.
+-- * 테이블 생성
+/*
+    CREATE TABLE 테이블명 (
+        컬럼명1   타입   [DEFAULT 기본값] [NOT NULL/NULL]  [제약조건],
+        컬럼명2   타입   [DEFAULT 기본값] [NOT NULL/NULL]  [제약조건],
+        컬럼명3   타입   [DEFAULT 기본값] [NOT NULL/NULL]  [제약조건],
+        ...
+    );
+*/
