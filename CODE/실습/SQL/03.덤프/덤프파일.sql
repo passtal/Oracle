@@ -31,3 +31,4 @@ GRANT DBA TO joeun
 -- exp userid=joeun/123456 ^
 -- file='C:\Users\tj-bu-706-09\Desktop\passtal\Oracle\CODE\실습\SQL\03.덤프\joeun.dmp' ^
 -- log='C:\Users\tj-bu-706-09\Desktop\passtal\Oracle\CODE\실습\SQL\03.덤프\joeun.log'
+
