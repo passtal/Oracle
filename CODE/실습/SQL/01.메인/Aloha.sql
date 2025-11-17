@@ -224,4 +224,80 @@ DROP TABLE MS_STUDENT
 INSERT INTO MS_STUDENT
 SELECT * FROM MS_STUDENT_BACK
 ;                               -- 실행 시 롤백
-SELECT * FROM MS_STUDENT;       -- 롤백 성공
+SELECT * FROM MS_STUDENT
+;                               -- 롤백 성공
+
+-- 65.
+-- MS_STUDENT 테이블의 성별(gender) 속성에 대하여,
+-- ('여', '남', '기타') 값만 입력 가능하도록 제약조건을 추가하시오
+ALTER TABLE MS_STUDENT
+MODIFY GENTDER CHECK(GENDER IN('여', '남', '기타'))
+;
+
+ALTER TABLE MS_STUDENT
+ADD CONSTRAINT MS_STUDENT_GENDER_CHECK
+CHECK(GENDER IN('여', '남', '기타'))
+;
+
+SELECT * FROM MS_STUDENT
+;
+
+UPDATE MS_STUDENT
+SET GENDER = '?'        -- 도메인 무결성에 위배됨 -- ? X
+WHERE ST_NO = '20240001'
+;
+
+-- * 도메인 무결성 보장
+-- * CHECK 조건으로 지정한 값이 아닌 다른 값을 입력/수정하는 경우
+-- 데이터가 적용되지 않도록 제약한다
+-- ORA-02290 : "체크 제약조건이 위배되었습니다"
+
+
+-- 66 ~ 69.
+-- MS_USER, MS_BOARD, MS_FILE, MS_REPLY 테이블을
+-- 테이블 정의서에 따라 생성해보세요.
+
+CREATE TABLE MS_USER (
+    USER_NO     NUMBER          NOT NULL PRIMARY KEY,
+    USER_ID     VARCHAR(100)    NOT NULL UNIQUE,
+    USER_PW     VARCHAR(200)    NOT NULL,
+    USER_NAME   VARCHAR(200)    NOT NULL,
+    BIRTH       DATE            NOT NULL,
+    TEL         VARCHAR2(20)    UNIQUE,
+    ADDRESS     VARCHAR2(200)   NULL,
+    REG_DATE    DATE    DEFAULT sysdate NOT NULL,
+    UPD_DATE    DATE    DEFAULT sysdate NOT NULL
+);
+
+CREATE TABLE MS_BOARD (
+    BOARD_NO    NUMBER          NOT NULL PRIMARY KEY,  -- SEQUENCE
+    TITLE       VARCHAR2(200)   NOT NULL,
+    CONTENT     CLOB            NOT NULL,
+    WRITER      VARCHAR2(100)   NOT NULL,
+    HIT         NUMBER          NOT NULL,
+    LIKE_CNT    NUMBER          NOT NULL,
+    DEL_YN      CHAR(2)         NULL,
+    DEL_DATE    DATE            NULL,
+    REG_DATE    DATE    DEFAULT sysdate NOT NULL,   -- REG,UPD 등록일자 기준
+    UPD_DATE    DATE    DEFAULT sysdate NOT NULL
+);
+
+CREATE TABLE MS_FILE (
+    FILE_NO     NUMBER          NOT NULL PRIMARY KEY,
+    BOARD_NO    NUMBER          NOT NULL,
+    FILE_NAME   VARCHAR2(2000)  NOT NULL,
+    FILE_DATE   BLOB            NOT NULL,
+    REG_DATE    DATE    DEFAULT sysdate NOT NULL,
+    UPD_DATE    DATE    DEFAULT sysdate NOT NULL
+);
+
+CREATE TABLE MS_REPLY (
+    REPLY_NO    NUMBER          NOT NULL PRIMARY KEY,
+    BOARD_NO    NUMBER          NOT NULL,
+    CONTENT     VARCHAR2(2000)  NOT NULL,
+    WRITER      VARCHAR2(100)   NOT NULL,
+    DEL_YN      CHAR(2)         NULL,
+    DEL_DATE    DATE            NULL,
+    REG_DATE    DATE    DEFAULT sysdate NOT NULL,
+    UPD_DATE    DATE    DEFAULT sysdate NOT NULL
+);
