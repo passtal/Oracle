@@ -570,3 +570,5 @@ CREATE INDEX IDX_MS_USER_NAME ON MS_USER (USER_NAME);
 
 -- 인덱스 삭제
 DROP INDEX IDX_MS_USER_NAME;
+
+-- 그룹 관련 함수 (오라클 실습용)
