@@ -1,0 +1,89 @@
+SELECT *
+FROM USER_TABLES;       -- 테이블 정보
+
+SELECT *
+FROM USER_TAB_COLUMNS
+WHERE column_name LIKE '%EMPLOYEE%'     -- 컬럼 정보
+;
+
+
+
+
+SELECT NAME, DATETIME
+FROM (
+    SELECT ROWNUM, I.NAME, I.DATETIME
+    FROM ANIMAL_INS I
+        LEFT JOIN ANIMAL_OUTS O
+        ON I.ANIMAL_ID = O.ANIMAL_ID
+    WHERE O.ANIMAL_ID IS NULL
+    ORDER BY DATETIME ASC
+)
+WHERE ROWNUM <= 3
+;
+
+
+
+SELECT
+    M.MEMBER_NAME,
+    R.REVIEW_TEXT,
+    TO_CHAR(R.REVIEW_DATE, 'YYYY-MM-DD') AS REVIEW_DATE
+FROM
+    MEMBER_PROFILE M
+JOIN
+    REST_REVIEW R ON M.MEMBER_ID = R.MEMBER_ID
+WHERE
+    M.MEMBER_ID IN (
+        SELECT
+            MEMBER_ID
+        FROM
+            REST_REVIEW
+        GROUP BY
+            MEMBER_ID
+        HAVING
+            COUNT(*) = (
+                SELECT
+                    MAX(COUNT(*))
+                FROM
+                    REST_REVIEW
+                GROUP BY
+                    MEMBER_ID
+            )
+    )
+ORDER BY
+    R.REVIEW_DATE ASC,
+    R.REVIEW_TEXT ASC;
+
+
+
+-- 7월 아이스크림 총 주문량
+-- 상반기의 아이스크림 총 주문량을 더한 값
+-- 이 큰 순서대로
+-- 상위 3개의 맛을 조회
+SELECT FLAVOR
+FROM (
+    SELECT FLAVOR, TOTAL_ORDER
+    FROM FIRST_HALF
+    UNION ALL
+    SELECT FLAVOR, TOTAL_ORDER
+    FROM JULY
+    )
+GROUP BY FLAVOR
+ORDER BY SUM(TOTAL_ORDER) DESC
+FETCH FIRST 3 ROWS ONLY
+;
+
+
+-- 4 5 6 등 조회하는 법
+SELECT FLAVOR
+FROM (
+    SELECT FLAVOR, TOTAL_ORDER
+    FROM FIRST_HALF
+    UNION ALL
+    SELECT FLAVOR, TOTAL_ORDER
+    FROM JULY
+    )
+GROUP BY FLAVOR
+ORDER BY SUM(TOTAL_ORDER) DESC
+OFFSET 3 ROWS FETCH NEXT 3 ROWS ONLY -- 123 제끼고 그 다음 3순위 불러오기
+;
+
