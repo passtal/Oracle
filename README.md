@@ -1,4 +1,3 @@
-Oracle/SQL DBMS 실습
+# Oracle/SQL DBMS
 
-MSA 15 
-
+MS Virtual Studio Code
